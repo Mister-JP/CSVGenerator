@@ -50,6 +50,14 @@ def getAllFC(fileName):
             centres.append(row[0])
     return centres
 
+#Jules:
+#TODO: make softwareID generater
+#TODO: make software ID csv table
+
+
+#Jignasu
+#TODO: make random status generator function
+
 def rowGen(numberOfRobots):
     perFC = []
     for robot in range(numberOfRobots):

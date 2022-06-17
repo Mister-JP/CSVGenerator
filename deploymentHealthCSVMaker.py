@@ -57,6 +57,9 @@ def getAllFC(fileName):
 
 #Jignasu
 #TODO: make random status generator function
+def randStatusGen():
+    status = ["pass", "fail", "pass", "pass", "pass", "pass", "fail", "fail"]
+    return status[random.randint(0,len(status)-1)]
 
 def rowGen(numberOfRobots):
     perFC = []
@@ -84,4 +87,7 @@ def rowsPerFC():
 #randomDateGen()
 #print(latestDateGen())
 #print(getAllFC('output.csv'))
-rowsPerFC()
+print(randStatusGen())
+
+
+#rowsPerFC()

@@ -61,7 +61,7 @@ def getAllFC(fileName):
 
 #Jignasu
 def randStatusGen():
-    status = ["pass", "fail", "pass", "pass", "pass", "pass", "fail", "fail"]
+    status = ["pass",  "pass", "pass", "pass", "pass", "fail"]
     return status[random.randint(0,len(status)-1)]
 
 def rowPerRobot(ARN, FcID, numberOfUpdates):

@@ -8,6 +8,10 @@ def generateString(length):
     result = ''.join((random.choice(string.ascii_lowercase) for x in range(length)))
     return result
 
+def generateSoftwareID():
+    softwareID = generateString(5) + str(random.randint(1,500)) + "-" + str(random.randint(1,3000)) + "-" + str(random.randint(1,2000))
+    return softwareID
+
 #used to make list of all the FC in US with AR sortable as their type
 def makeACSV(fileName, outFileName):
     with open(outFileName, 'w', encoding = 'UTF8') as f:
@@ -56,38 +60,54 @@ def getAllFC(fileName):
 
 
 #Jignasu
-#TODO: make random status generator function
 def randStatusGen():
     status = ["pass", "fail", "pass", "pass", "pass", "pass", "fail", "fail"]
     return status[random.randint(0,len(status)-1)]
 
-def rowGen(numberOfRobots):
+def rowPerRobot(ARN, FcID, numberOfUpdates):
+    perARN = []
+    for date in range(random.randint(2,7)):
+            date = randomDateGen()
+            softwareID = generateSoftwareID()
+            status = randStatusGen()
+            perDate = [ARN, FcID, date, softwareID, status, "false"]
+            perARN.append(perDate)
+    date = latestDateGen()
+    softwareID = generateSoftwareID()
+    status = randStatusGen()
+    perDate = [ARN, FcID, date, softwareID, status, "true"]
+    perARN.append(perDate)
+    return perARN
+
+#row gen will create a list of robots present in one FC
+def rowsPerFC(FcID, numberOfRobots):
     perFC = []
     for robot in range(numberOfRobots):
         perARN = []
         ARN = generateString(7)
-        for date in range(random.randint(2,7)):
-            date = randomDateGen()
-            softwareID = generateString(5)
-            perDate = [ARN, date, softwareID]
-            perARN.append(perDate)
-        date = latestDateGen()
-        softwareID = generateString(5)
-        perDate = [ARN, date, softwareID]
-        perARN.append(perDate)
-        perFC.append(perARN)
+        perFC.append(rowPerRobot(ARN, FcID, random.randint(2,7)))
     return perFC
 
-def rowsPerFC():
-    header = ['ARN', 'FcID', 'Date', 'SoftwareID', 'DeploymentStatus', 'Latest']
-    print(rowGen(4))
+def rowGen(outFileName):
+    with open(outFileName, 'w', encoding = 'UTF8') as f:
+        writer = csv.writer(f)
+        header = ['ARN', 'FcID', 'Date', 'SoftwareID', 'DeploymentStatus', 'Latest']
+        writer.writerow(header)
+        FCID = getAllFC('output.csv')
+        for Fc in FCID:
+            for robotArray in rowsPerFC(Fc, random.randint(3,15))[0]:
+                #print(robotArray)
+                writer.writerow(robotArray)
+    f.close()
+
+
 
 #generateString(4);
 #makeACSV('facilities.csv','output.csv')
 #randomDateGen()
 #print(latestDateGen())
 #print(getAllFC('output.csv'))
-print(randStatusGen())
+#print(randStatusGen())
 
 
-#rowsPerFC()
+rowGen('test.csv')
